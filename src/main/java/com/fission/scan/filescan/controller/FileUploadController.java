@@ -31,6 +31,7 @@ public class FileUploadController {
 	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
 		
 		logger.info("uploading file.....");
+		boolean fileUploaded = true;
 		
 		File myfile = new File(FILE_DIR + file.getOriginalFilename());
 		FileOutputStream fos = null;
@@ -40,9 +41,11 @@ public class FileUploadController {
 			fos = new FileOutputStream(myfile);
 			fos.write(file.getBytes());
 		}catch(FileNotFoundException fie) {
+			fileUploaded = false;
 			logger.error("File not found....", fie.getMessage());
 			fie.printStackTrace();
 		}catch(IOException ioe) {
+			fileUploaded = false;
 			logger.error("Exception in reading file.....", ioe.getMessage());
 			ioe.printStackTrace();
 		}finally {
@@ -55,8 +58,13 @@ public class FileUploadController {
 				e.printStackTrace();
 			}
 		}
-		logger.info("File upload completed successfully....");
-		return new ResponseEntity<>("success",HttpStatus.OK);
+		if(fileUploaded) {
+			logger.info("File upload completed successfully....");
+			return new ResponseEntity<>("success",HttpStatus.OK);
+		}else {
+			logger.info("File upload failed....");
+			return new ResponseEntity<>("success",HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

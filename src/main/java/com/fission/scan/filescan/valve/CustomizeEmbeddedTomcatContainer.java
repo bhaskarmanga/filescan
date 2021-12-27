@@ -53,12 +53,16 @@ public class CustomizeEmbeddedTomcatContainer implements WebServerFactoryCustomi
         protected void log(CharArrayWriter message) {
             httpAccessLogLogger.info(message.toString());
             
+            logger.info("--------------------------------------------------- ");
             String[] respLogArray = message.toString().split(" ");
-            if((respLogArray[0].trim()).equalsIgnoreCase(URI))
-            if(!(respLogArray[1].trim()).equalsIgnoreCase(SUCCESS_CODE)) {
-                logger.warn("Unusual Activity, malicious file uploading: {}", message.toString());
+            logger.info("respLogArray[0]: ",respLogArray[0]);
+            logger.info("respLogArray[1]: ",respLogArray[1]);
+            if((respLogArray[0]).equalsIgnoreCase(URI))
+            if(!(respLogArray[1]).equalsIgnoreCase(SUCCESS_CODE)) {
+                logger.warn("Unusual Activity, uploading malicious file: {}", message.toString());
                 throw new RuntimeException("Virus detected. .. ... .....");
             }
+            logger.info("--------------------------------------------------- ");
         }
     }
 

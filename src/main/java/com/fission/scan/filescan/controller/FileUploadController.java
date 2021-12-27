@@ -63,7 +63,7 @@ public class FileUploadController {
 			return new ResponseEntity<>("success",HttpStatus.OK);
 		}else {
 			logger.info("File upload failed....");
-			return new ResponseEntity<>("success",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("failed",HttpStatus.BAD_REQUEST);
 		}
 	}
 

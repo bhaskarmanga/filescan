@@ -1,24 +1,13 @@
 package com.fission.scan.filescan.valve;
 
 import java.io.CharArrayWriter;
-import java.io.IOException;
 
-import javax.servlet.ServletException;
-
-import org.apache.catalina.Valve;
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.AbstractAccessLogValve;
-import org.apache.catalina.valves.ValveBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartException;
-
-import com.trend.app_protect.AgentError;
-import com.trend.app_protect.OverrideResponseError;
 
 @Component
 public class CustomizeEmbeddedTomcatContainer implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
@@ -26,7 +15,7 @@ public class CustomizeEmbeddedTomcatContainer implements WebServerFactoryCustomi
 	private static final Logger logger = LoggerFactory.getLogger(CustomizeEmbeddedTomcatContainer.class);
 	
     private static final String SUCCESS_CODE = "statuscode=200";
-    private static final String URI = "uri=/services/mydocs";
+    private static final String URI = "uri=\"/upload/files\"";
     
     @Override
     public void customize(TomcatServletWebServerFactory factory) {
@@ -55,12 +44,11 @@ public class CustomizeEmbeddedTomcatContainer implements WebServerFactoryCustomi
             
             logger.info("--------------------------------------------------- ");
             String[] respLogArray = message.toString().split(" ");
-            logger.info("respLogArray[0]: ",respLogArray[0]);
-            logger.info("respLogArray[1]: ",respLogArray[1]);
+            logger.info( respLogArray[0]);
+            logger.info(respLogArray[1]);
             if((respLogArray[0]).equalsIgnoreCase(URI))
             if(!(respLogArray[1]).equalsIgnoreCase(SUCCESS_CODE)) {
-                logger.warn("Unusual Activity, uploading malicious file: {}", message.toString());
-                throw new RuntimeException("Virus detected. .. ... .....");
+                logger.warn("Unusual Activity, uploading malicious file.");
             }
             logger.info("--------------------------------------------------- ");
         }
